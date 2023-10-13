@@ -1,8 +1,6 @@
 package login.kakaologintest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -11,24 +9,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private UserServiceImpl userService;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // HTTP 보안 설정을 구성 URL 패턴에 대한 접근 권한을 설정하고, 로그인 및 로그아웃 관련 설정을 구성
         http
                 .authorizeRequests()
-                .antMatchers("/public/**").permitAll() //public 으로 시작하는 URL 에 대한 접근을 모든 사용자에게 허용
-                .antMatchers("/private/**").authenticated() //private 로 시작하는 URL 에 대한 접근은 인증된 사용자에게만 허용
+                .antMatchers("/**").permitAll() // 특정 URL 패턴에 대해 로그인 없이 액세스 허용
+                .anyRequest().authenticated() // 그 외의 모든 요청은 인증 필요
                 .and()
                 .formLogin()
-                .loginPage("/index") //로그인 페이지의 경로설정
-                .and()
-                .logout()
-                .logoutSuccessUrl("/logout") //로그아웃 후 redirect 페이지 경로설정
-                .and()
-                .csrf().disable(); // CSRF 보안 비활성화 (개발용)
+                .loginPage("/login") // 로그인 페이지 설정
+                .permitAll(); // 로그인 페이지는 누구나 액세스 가능
     }
-
 }
