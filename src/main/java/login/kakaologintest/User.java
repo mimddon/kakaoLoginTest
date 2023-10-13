@@ -8,7 +8,11 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String email;
+    private String username;
+    private String password;
 
     private String kakaoUserId; // 카카오에서 제공하는 사용자 아이디
     private String kakaoProfileImageUrl; // 카카오 프로필 이미지 URL

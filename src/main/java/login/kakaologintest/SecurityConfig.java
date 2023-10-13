@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private CustomUserDetailsService customUserDetailsService;
+    private UserServiceImpl userService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -23,17 +23,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/private/**").authenticated() //private 로 시작하는 URL 에 대한 접근은 인증된 사용자에게만 허용
                 .and()
                 .formLogin()
-                .loginPage("/login") //로그인 페이지의 경로설정
+                .loginPage("/index") //로그인 페이지의 경로설정
                 .and()
                 .logout()
-                .logoutSuccessUrl("/login?logout") //로그아웃 후 redirect 페이지 경로설정
+                .logoutSuccessUrl("/logout") //로그아웃 후 redirect 페이지 경로설정
                 .and()
                 .csrf().disable(); // CSRF 보안 비활성화 (개발용)
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService); // JPA를 사용한 UserDetailsService를 사용
     }
 
 }
